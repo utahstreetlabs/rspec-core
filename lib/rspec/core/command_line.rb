@@ -25,7 +25,10 @@ module RSpec
         @configuration.reporter.report(@world.example_count, @configuration.randomize? ? @configuration.seed : nil) do |reporter|
           begin
             @configuration.run_hook(:before, :suite)
-            @world.example_groups.ordered.map {|g| g.run(reporter)}.all? ? 0 : @configuration.failure_exit_code
+            (1..@configuration.example_group_retries).inject(@world.example_groups.ordered) do |groups, i|
+              out.puts "attempt #{i}"
+              groups.reject {|g| g.run(reporter)}
+            end.any? ? @configuration.failure_exit_code : 0
           ensure
             @configuration.run_hook(:after, :suite)
           end
