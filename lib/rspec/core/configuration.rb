@@ -124,6 +124,8 @@ MESSAGE
       # Run all examples if none match the configured filters (default: `false`).
       add_setting :run_all_when_everything_filtered
 
+      add_setting :example_group_retries
+
       # Seed for random ordering (default: generated randomly each run).
       #
       # When you run specs with `--order random`, RSpec generates a random seed
@@ -186,6 +188,7 @@ MESSAGE
         @color = false
         @pattern = '**/*_spec.rb'
         @failure_exit_code = 1
+        @example_group_retries = 1
         @backtrace_clean_patterns = DEFAULT_BACKTRACE_PATTERNS.dup
         @default_path = 'spec'
         @filter_manager = FilterManager.new
